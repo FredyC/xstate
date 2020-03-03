@@ -440,7 +440,7 @@ class StateNode<
    */
   public withConfig(
     options: Partial<MachineOptions<TContext, TEvent>>,
-    context: TContext | undefined = this.context
+    context: Partial<TContext> | undefined = this.context
   ): StateNode<TContext, TStateSchema, TEvent> {
     const { actions, activities, guards, services, delays } = this.options;
 
@@ -453,7 +453,7 @@ class StateNode<
         services: { ...services, ...options.services },
         delays: { ...delays, ...options.delays }
       },
-      context
+      context as TContext
     );
   }
 
@@ -463,9 +463,9 @@ class StateNode<
    * @param context Custom context (will override predefined context, not recursive)
    */
   public withContext(
-    context: TContext
+    context: Partial<TContext>
   ): StateNode<TContext, TStateSchema, TEvent> {
-    return new StateNode(this.config, this.options, context);
+    return new StateNode(this.config, this.options, context as TContext);
   }
 
   /**
@@ -476,7 +476,7 @@ class StateNode<
       id: this.id,
       key: this.key,
       version: this.version,
-      context: this.context!,
+      context: this.context as TContext,
       type: this.type,
       initial: this.initial,
       history: this.history,
